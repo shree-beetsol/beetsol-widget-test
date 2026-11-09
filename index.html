@@ -1,0 +1,43 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Kitepoint (Beetsol widget test page)</title>
+<style>
+  body { margin: 0; font-family: system-ui, -apple-system, "Segoe UI", sans-serif; background: #eef3fb; color: #1d2433; }
+  header { padding: 18px 32px; background: #ffffff; border-bottom: 1px solid #dde3ee; font-weight: 700; }
+  main { padding: 32px; }
+  .note { max-width: 640px; font-size: 14px; line-height: 1.5; color: #4a5568; }
+</style>
+</head>
+<body>
+<header>Kitepoint</header>
+<main>
+  <h1>Dashboard</h1>
+  <p class="note" id="note"></p>
+</main>
+<script>
+  // A customer's page with Beetsol's widget on it, on a site of its own (as a customer's is), for the widget's tests:
+  // the release test's P17-2 and PR #18's widget sign-in. It holds no token: open it with ?token=<the workspace's
+  // token from Settings > Embed>. ?app= picks another Beetsol address, https on beetsol.com only.
+  (function () {
+    var q = new URLSearchParams(location.search);
+    var token = q.get('token');
+    var app = 'https://app.beetsol.com';
+    var asked = q.get('app');
+    if (asked && /^https:\/\/([a-z0-9-]+\.)*beetsol\.com$/.test(asked.replace(/\/+$/, ''))) app = asked.replace(/\/+$/, '');
+    var note = document.getElementById('note');
+    if (!token) {
+      note.textContent = "To load the widget, add ?token= and the workspace's token from Settings > Embed to this page's address.";
+      return;
+    }
+    note.textContent = 'The Beetsol widget from ' + app + ' is on this page.';
+    window.BEETSOL_EMBED_TOKEN = token;
+    var s = document.createElement('script');
+    s.src = app + '/beetsol-embed.js';
+    document.body.appendChild(s);
+  })();
+</script>
+</body>
+</html>
